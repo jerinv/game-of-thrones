@@ -151,4 +151,4 @@ from PIL import Image
 screentime_img = Image.open(r'images/got_screentime.png', 'r')
 got_title_img = Image.open(r'images/got_title.png', 'r')
 screentime_img.paste(got_title_img, (415,0), mask=got_title_img)
-screentime_img.save(r'charts/GoT_ScreenTime_Chart.png', format='png')
+screentime_img.save(r'charts/game_of_thrones_screentime.png', format='png')
