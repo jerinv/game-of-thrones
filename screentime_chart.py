@@ -133,7 +133,7 @@ ax.tick_params(axis="y", labelsize=18)
 ax.tick_params(axis='x', labelsize=18)
 
 string = f'Top {topNum} Characters by Screen Time'
-ax.text(470, topNum+1.85, string, fontweight=550, fontsize=30, horizontalalignment='right', verticalalignment='top')
+ax.text(510, topNum+1.85, string, fontweight=550, fontsize=30, horizontalalignment='right', verticalalignment='top')
 
 string = 'By Jerin Varghese\nData: github.com/jeffreylancaster/game-of-thrones' 
 fig.text(0.005, 0.05, string, fontdict={'color':'gray', 'size':12, 'va':'center'})
@@ -150,5 +150,7 @@ fig.savefig(r'images/got_screentime.png', facecolor=fig.get_facecolor(), bbox_in
 from PIL import Image
 screentime_img = Image.open(r'images/got_screentime.png', 'r')
 got_title_img = Image.open(r'images/got_title.png', 'r')
+dragon_img = Image.open(r'images/dragon_silo.png', 'r')
 screentime_img.paste(got_title_img, (415,0), mask=got_title_img)
+screentime_img.paste(dragon_img, (30,-10), mask=dragon_img)
 screentime_img.save(r'charts/game_of_thrones_screentime.png', format='png')
