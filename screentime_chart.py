@@ -16,37 +16,47 @@ from PIL import Image
 topNum = 15
 # =============================================================================
 
-df = pd.read_json(r"data/episodes.json", orient="values")
 
-seasonNums = []
-episodeNums = []
-sceneStarts = []
-sceneEnds = []
-characterNames = []
-for row in df.itertuples():
-    seasonNum = row.episodes["seasonNum"]
-    episodeNum = row.episodes["episodeNum"]
-    for scene in row.episodes["scenes"]:
-        sceneStart = scene["sceneStart"]
-        sceneEnd = scene["sceneEnd"]
-        for character in scene["characters"]:
-            characterName = character["name"]
+def read_data():
+    df = pd.read_json(r"data/episodes.json", orient="values")
+    return df
 
-            seasonNums.append(seasonNum)
-            episodeNums.append(episodeNum)
-            sceneStarts.append(sceneStart)
-            sceneEnds.append(sceneEnd)
-            characterNames.append(characterName)
 
-screenTime = pd.DataFrame(
-    {
-        "Season": seasonNums,
-        "Episode": episodeNums,
-        "SceneStart": sceneStarts,
-        "SceneEnd": sceneEnds,
-        "Name": characterNames,
-    }
-)
+def create_dataset(df):
+    seasonNums = []
+    episodeNums = []
+    sceneStarts = []
+    sceneEnds = []
+    characterNames = []
+    for row in df.itertuples():
+        seasonNum = row.episodes["seasonNum"]
+        episodeNum = row.episodes["episodeNum"]
+        for scene in row.episodes["scenes"]:
+            sceneStart = scene["sceneStart"]
+            sceneEnd = scene["sceneEnd"]
+            for character in scene["characters"]:
+                characterName = character["name"]
+
+                seasonNums.append(seasonNum)
+                episodeNums.append(episodeNum)
+                sceneStarts.append(sceneStart)
+                sceneEnds.append(sceneEnd)
+                characterNames.append(characterName)
+
+    screenTime = pd.DataFrame(
+        {
+            "Season": seasonNums,
+            "Episode": episodeNums,
+            "SceneStart": sceneStarts,
+            "SceneEnd": sceneEnds,
+            "Name": characterNames,
+        }
+    )
+    return screenTime
+
+
+df = read_data()
+screenTime = create_dataset(df)
 
 screenTime["SceneStart"] = pd.to_timedelta(screenTime.SceneStart)
 screenTime["SceneEnd"] = pd.to_timedelta(screenTime.SceneEnd)
@@ -168,9 +178,9 @@ for i, duration in enumerate(topDurations):
 # Remove extra white space
 plt.subplots_adjust(top=0.985, right=0.99)
 
-fig.savefig(
-    r"images/got_screentime.png", facecolor=fig.get_facecolor(), bbox_inches="tight"
-)
+# fig.savefig(
+#     r"images/got_screentime.png", facecolor=fig.get_facecolor(), bbox_inches="tight"
+# )
 
 # Add GoT Title Image
 screentime_img = Image.open(r"images/got_screentime.png", "r")
@@ -178,4 +188,4 @@ got_title_img = Image.open(r"images/got_title.png", "r")
 dragon_img = Image.open(r"images/dragon_silo.png", "r")
 screentime_img.paste(got_title_img, (415, 0), mask=got_title_img)
 screentime_img.paste(dragon_img, (30, -10), mask=dragon_img)
-screentime_img.save(r"charts/game_of_thrones_screentime.png", format="png")
+# screentime_img.save(r"charts/game_of_thrones_screentime.png", format="png")
